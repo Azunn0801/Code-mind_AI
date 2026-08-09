@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from app.core.config import get_settings
 from app.domain.models import ConsentPurpose, LearningSession
-from app.infrastructure.postgres import PostgresRepository
+from app.infrastructure.postgres import PostgresRepository, create_postgres_engine
 from app.main import build_repository, create_app
 
 
@@ -33,6 +33,14 @@ def test_postgres_state_repository_survives_rebuild(tmp_path):
     assert restored_lesson is not None
     assert restored_lesson.source.url.startswith("https://docs.python.org/")
     second.close()
+
+
+def test_render_postgres_url_uses_psycopg3_driver():
+    engine = create_postgres_engine("postgresql://demo:demo@db:5432/codemind")
+    try:
+        assert engine.url.drivername == "postgresql+psycopg"
+    finally:
+        engine.dispose()
 
 
 def test_build_repository_selects_postgres_mode(monkeypatch):

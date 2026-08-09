@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: codemind-api-azunn0801
+    runtime: python
+    rootDir: backend
+    plan: free
+    region: singapore
+    buildCommand: pip install .
+    startCommand: python -m app.render_entrypoint
+    healthCheckPath: /health/ready
+    autoDeployTrigger: commit
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      - key: APP_ENV
+        value: production
+      - key: AUTH_MODE
+        value: demo
+      - key: DEMO_TOKEN_SECRET
+        generateValue: true
+      - key: DEMO_TOKEN_TTL_SECONDS
+        value: "86400"
+      - key: CORS_ORIGINS
+        value: https://codemind-khoinguyen-2026.vercel.app
+      - key: CODE_RUNNER_MODE
+        value: simulated
+      - key: AI_MODE
+        value: canned
+      - key: AI_MAX_INTERACTIONS_PER_SESSION
+        value: "3"
+      - key: REPOSITORY_MODE
+        value: postgres
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codemind-db-azunn0801
+          property: connectionString
+
+databases:
+  - name: codemind-db-azunn0801
+    plan: free
+    region: singapore
+    postgresMajorVersion: "16"
+    databaseName: codemind
+    user: codemind
+    ipAllowList: []

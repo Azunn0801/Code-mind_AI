@@ -60,7 +60,24 @@ _APPLICATION_STATE = Table(
 def create_postgres_engine(database_url: str) -> Engine:
     """Create the engine only when the PostgreSQL repository mode is selected."""
 
+    # Managed platforms such as Render expose ``postgresql://`` URLs. SQLAlchemy
+    # otherwise interprets that scheme as the psycopg2 driver, while this project
+    # intentionally installs psycopg 3.
+    if database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    elif database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql+psycopg://", 1)
     return create_engine(database_url, pool_pre_ping=True, future=True)
+
+
+def bootstrap_postgres_schema(database_url: str) -> None:
+    """Create the P0 state table before the Render web process starts."""
+
+    engine = create_postgres_engine(database_url)
+    try:
+        _METADATA.create_all(engine)
+    finally:
+        engine.dispose()
 
 
 class PostgresRepository(InMemoryRepository):
