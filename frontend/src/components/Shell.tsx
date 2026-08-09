@@ -5,11 +5,9 @@ import type { NavItem } from './navigation'
 export function PublicHeader() {
   const [isMenuOpen, setMenuOpen] = useState(false)
   const nav: NavItem[] = [
-    { label: 'Sản phẩm', path: '/' },
-    { label: 'Demo', path: '/demo/setup' },
-    { label: 'Cho trường học', path: '/campus' },
-    { label: 'Nghiên cứu', path: '/about' },
-    { label: 'Bảng giá', path: '/pricing' },
+    { label: 'Giới thiệu', path: '/' },
+    { label: 'MVP trực tiếp', path: '/demo/access' },
+    { label: 'Cách học', path: '/integrity' },
   ]
   const goTo = (path: string) => {
     setMenuOpen(false)
@@ -22,11 +20,11 @@ export function PublicHeader() {
         {nav.map((item) => <button key={item.path} onClick={() => goTo(item.path)}>{item.label}</button>)}
       </nav>
       <div className="public-header__actions">
-        <button className="text-link" onClick={() => goTo('/login')}>Đăng nhập</button>
-        <button className="button button--primary" onClick={() => goTo('/register')}>Bắt đầu học</button>
+        <button className="text-link" onClick={() => goTo('/demo/access')}>Tài khoản demo</button>
+        <button className="button button--primary" onClick={() => goTo('/demo/access')}>Mở MVP</button>
       </div>
       <button className="mobile-menu" aria-expanded={isMenuOpen} onClick={() => setMenuOpen((current) => !current)}>{isMenuOpen ? 'Đóng' : 'Menu'}</button>
-      {isMenuOpen && <nav className="public-header__mobile-menu" aria-label="Điều hướng di động">{nav.map((item) => <button key={item.path} onClick={() => goTo(item.path)}>{item.label}</button>)}<button onClick={() => goTo('/login')}>Đăng nhập</button></nav>}
+      {isMenuOpen && <nav className="public-header__mobile-menu" aria-label="Điều hướng di động">{nav.map((item) => <button key={item.path} onClick={() => goTo(item.path)}>{item.label}</button>)}<button onClick={() => goTo('/demo/access')}>Tài khoản demo</button></nav>}
     </header>
   )
 }
@@ -50,7 +48,7 @@ export function AppShell({
   return (
     <div className={`app-shell app-shell--${kind}`}>
       <header className="app-header">
-        <div className="app-header__left"><b>{names[kind]}</b><span className="app-badge">{badge}</span></div>
+        <div className="app-header__left"><b>{names[kind]}</b><span className="app-badge">{badge}</span><span className="app-badge prototype-badge">Figma prototype · dữ liệu mẫu</span></div>
         <span className="app-header__status">{status}</span>
       </header>
       <div className="app-shell__body">
@@ -83,7 +81,7 @@ export function LessonShell({ step, status, children, mobile = false }: { step: 
   return (
     <div className={`lesson-shell ${mobile ? 'lesson-shell--mobile' : ''}`}>
       <header className="lesson-header">
-        {mobile ? <><b>CodeMind</b><span className="lesson-chip">{Math.min(step, 5)} / 5</span><span className="lesson-chip">{status}</span></> : <><b>CodeMind</b><span className="lesson-chip">Bài học: deque</span><nav><span>Hôm nay</span><span>Tài liệu</span><span>Luyện tập</span><span>Bài đánh giá</span><span>Ghi chú</span><span>Cộng đồng</span></nav><span className="lesson-chip">{status}</span></>}
+        {mobile ? <><b>CodeMind</b><span className="lesson-chip">{Math.min(step, 6)} / 6</span><span className="lesson-chip">{status}</span></> : <><b>CodeMind</b><span className="lesson-chip">Bài học: deque</span><nav><span>Hôm nay</span><span>Tài liệu</span><span>Luyện tập</span><span>Bài đánh giá</span><span>Ghi chú</span><span>Cộng đồng</span></nav><span className="lesson-chip">{status}</span></>}
       </header>
       <div className="lesson-shell__body">
         {!mobile && <aside className="lesson-rail">

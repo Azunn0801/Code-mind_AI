@@ -4,10 +4,12 @@ import { PublicHeader } from '../components/Shell'
 import { navigate } from '../components/navigation'
 
 const steps = [
-  ['1', 'Đọc và làm rõ', 'Đọc đúng đoạn Python 3.12 và làm rõ “maxlen”.'],
-  ['2', 'Chạy mã', 'Viết mã, chạy năm ca kiểm thử và thấy rõ lỗi chuỗi rỗng.'],
-  ['3', 'Nhận hỗ trợ', 'Hệ thống xác định điểm mắc và hỗ trợ theo từng mức.'],
-  ['4', 'Tự sửa', 'Tự sửa lên 5/5; mã trước–sau và ghi chú được lưu.'],
+  ['1', 'Đặt mục tiêu', 'Biết rõ điều cần làm trước khi bắt đầu.'],
+  ['2', 'Đọc và làm rõ', 'Đọc đúng đoạn Python 3.12 và làm rõ “maxlen”.'],
+  ['3', 'Nối khái niệm', 'Liên hệ deque, append và maxlen trước khi viết mã.'],
+  ['4', 'Chạy mã', 'Viết mã, chạy năm ca kiểm thử và thấy rõ lỗi chuỗi rỗng.'],
+  ['5', 'Nhận hỗ trợ', 'Hệ thống hỗ trợ theo từng mức, không làm bài hộ.'],
+  ['6', 'Xem evidence', 'Tự sửa lên 5/5; mã trước–sau được backend lưu lại.'],
 ]
 
 export function HomePage({ mobile = false }: { mobile?: boolean }) {
@@ -26,15 +28,15 @@ export function HomePage({ mobile = false }: { mobile?: boolean }) {
           <h1>Hiểu từ nguồn chuẩn.<br />Tự viết và sửa mã.</h1>
           <p>{mobile ? 'CodeMind chọn đúng phần cần học từ tài liệu chính thức, nối với thực hành và kiểm thử. AI chỉ hỗ trợ đúng chỗ bạn đang mắc.' : 'CodeMind biến tài liệu chính thức thành bài học ngắn, có mục tiêu rõ và nối thẳng với thực hành. Kết quả do bộ kiểm thử xác định; AI chỉ hỗ trợ đúng chỗ bạn đang mắc.'}</p>
           <div className="action-row">
-            <Button onClick={() => navigate('/demo/setup')}>Trải nghiệm một bài học</Button>
+            <Button onClick={() => navigate('/demo/access')}>Trải nghiệm một bài học</Button>
             <Button tone="secondary" onClick={() => navigate('/integrity')}>Xem cách học đúng</Button>
           </div>
-          <small>Demo dùng Python collections.deque · khoảng 3–4 phút</small>
+          <small>Demo dùng Python 3.12 · collections.deque · tối đa 3 phút</small>
         </div>
         {!mobile && <Card className="hero-flow">
-          <h3>Một bài học, bốn bước rõ ràng</h3>
+          <h3>Một bài học, sáu bước rõ ràng</h3>
           {steps.map(([num, title, copy], index) => (
-            <button key={num} onClick={() => navigate(['/demo/source', '/demo/practice', '/demo/ai', '/demo/evidence'][index])}>
+            <button key={num} onClick={() => navigate(['/demo/objective', '/demo/source', '/demo/concept', '/demo/practice', '/demo/ai', '/demo/evidence'][index])}>
               <span>{num}</span><div><b>{title}</b><small>{copy}</small></div>
             </button>
           ))}
@@ -67,7 +69,7 @@ export function HomePage({ mobile = false }: { mobile?: boolean }) {
 
       <section className="public-container final-cta">
         <div><h2>Thử một bài học được thiết kế để hiểu</h2><p>Đọc đúng nguồn, nắm khái niệm, áp dụng, kiểm thử và tự sửa trong một luồng ngắn.</p></div>
-        <Button onClick={() => navigate('/demo/setup')}>Trải nghiệm bài học deque</Button>
+        <Button onClick={() => navigate('/demo/access')}>Trải nghiệm bài học deque</Button>
       </section>
       <PublicFooter />
     </div>

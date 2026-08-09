@@ -1,0 +1,1 @@
+"""CodeMind backend application package."""

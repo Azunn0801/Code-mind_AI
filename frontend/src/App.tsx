@@ -9,6 +9,10 @@ import { AIPage, ConceptPage, ErrorPage, EvidencePage, ObjectivePage, PracticePa
 import { StudentConcept, StudentDocs, StudentHome, StudentNotes, StudentPractice, StudentReview } from './screens/StudentPages'
 import { AssignmentBuilder, AssignmentReview, AssignmentsPage, ClassesPage, RosterPage, TeacherHome } from './screens/TeacherPages'
 import { AdminHome, FeedbackPage, GlossaryPage, SecurityPage, SourceGovernance, SupportPage } from './screens/AdminPages'
+import { LearningProvider } from './learning/LearningContext'
+import { LiveConceptPage, LiveObjectivePage, LivePracticePage, LiveSetupPage, LiveSourcePage } from './screens/LiveLearningDemo'
+import { LiveAiPage, LiveEvidencePage } from './screens/LiveMvpSteps'
+import { LiveAdminAnalyticsPage, LiveDemoAccessPage, LiveInstructorSummaryPage } from './screens/LiveDemoAccounts'
 import './index.css'
 
 type Route = { path: string; query: URLSearchParams; design?: DesignSpec }
@@ -40,7 +44,7 @@ function DesignGallery() {
   const [filter, setFilter] = useState<DesignSpec['group'] | 'all'>('all')
   const filtered = useMemo(() => filter === 'all' ? designs : designs.filter(item => item.group === filter), [filter])
   const groups: Array<DesignSpec['group'] | 'all'> = ['all', 'public', 'lesson', 'student', 'teacher', 'admin']
-  return <div className="public-page design-gallery"><PublicHeader /><main className="public-container page-pad"><div className="page-heading page-heading--actions"><div><span className="eyebrow">FIGMA IMPLEMENTATION CATALOG</span><h1>{designs.length} thiết kế đã ánh xạ</h1><p>Mỗi node Figma trỏ tới route, viewport và state tương ứng trong cùng một hệ thống component.</p></div><Button onClick={() => navigate('/demo/setup')}>Mở happy path</Button></div><div className="filter-row">{groups.map(group => <button key={group} className={filter === group ? 'active' : ''} onClick={() => setFilter(group)}>{group === 'all' ? `Tất cả (${designs.length})` : `${groupLabels[group]} (${designs.filter(item => item.group === group).length})`}</button>)}</div><div className="catalog-grid">{filtered.map(item => <Card key={item.id} className="catalog-card"><div><Chip tone={item.viewport === 'mobile' ? 'warning' : 'info'}>{item.viewport}</Chip><Chip tone="muted">{groupLabels[item.group]}</Chip></div><h3>{item.name}</h3><code>{item.id}</code><p>{item.path}</p><Button tone="secondary" onClick={() => navigate(`/design/${item.id.replace(':', '-')}`)}>Mở thiết kế</Button></Card>)}</div></main></div>
+  return <div className="public-page design-gallery"><PublicHeader /><main className="public-container page-pad"><div className="page-heading page-heading--actions"><div><span className="eyebrow">FIGMA IMPLEMENTATION CATALOG · PROTOTYPE, KHÔNG PHẢI DỮ LIỆU LIVE</span><h1>{designs.length} thiết kế đã ánh xạ</h1><p>Mỗi node Figma trỏ tới route, viewport và state tương ứng trong cùng một hệ thống component. Chỉ luồng MVP trực tiếp dùng API.</p></div><Button onClick={() => navigate('/demo/access')}>Mở MVP trực tiếp</Button></div><div className="filter-row">{groups.map(group => <button key={group} className={filter === group ? 'active' : ''} onClick={() => setFilter(group)}>{group === 'all' ? `Tất cả (${designs.length})` : `${groupLabels[group]} (${designs.filter(item => item.group === group).length})`}</button>)}</div><div className="catalog-grid">{filtered.map(item => <Card key={item.id} className="catalog-card"><div><Chip tone={item.viewport === 'mobile' ? 'warning' : 'info'}>{item.viewport}</Chip><Chip tone="muted">{groupLabels[item.group]}</Chip></div><h3>{item.name}</h3><code>{item.id}</code><p>{item.path}</p><Button tone="secondary" onClick={() => navigate(`/design/${item.id.replace(':', '-')}`)}>Mở thiết kế</Button></Card>)}</div></main></div>
 }
 
 function NotFound() {
@@ -68,13 +72,16 @@ function RouteView({ route }: { route: Route }) {
     case '/checkout': return <CheckoutPage />
     case '/payment/success': return <PaymentPage success />
     case '/payment/failed': return <PaymentPage success={false} />
-    case '/demo/setup': return <SetupPage initial={q.get('state') ?? 'required'} />
-    case '/demo/objective': return <ObjectivePage mobile={isMobileDesign} />
-    case '/demo/source': return <SourcePage selected={q.get('state') === 'selected'} mobile={isMobileDesign} />
-    case '/demo/concept': return <ConceptPage initial={q.get('state') ?? 'initial'} mobile={isMobileDesign} />
-    case '/demo/practice': return <PracticePage initial={q.get('state') ?? 'ready'} mobile={isMobileDesign} />
-    case '/demo/ai': return <AIPage initial={q.get('state') ?? 'question'} mobile={isMobileDesign} />
-    case '/demo/evidence': return <EvidencePage mobile={isMobileDesign} />
+    case '/demo/access': return <LiveDemoAccessPage />
+    case '/demo/setup': return route.design ? <SetupPage initial={q.get('state') ?? 'required'} /> : <LiveSetupPage />
+    case '/demo/objective': return route.design ? <ObjectivePage mobile={isMobileDesign} /> : <LiveObjectivePage />
+    case '/demo/source': return route.design ? <SourcePage selected={q.get('state') === 'selected'} mobile={isMobileDesign} /> : <LiveSourcePage />
+    case '/demo/concept': return route.design ? <ConceptPage initial={q.get('state') ?? 'initial'} mobile={isMobileDesign} /> : <LiveConceptPage />
+    case '/demo/practice': return route.design ? <PracticePage initial={q.get('state') ?? 'ready'} mobile={isMobileDesign} /> : <LivePracticePage />
+    case '/demo/ai': return route.design ? <AIPage initial={q.get('state') ?? 'question'} mobile={isMobileDesign} /> : <LiveAiPage />
+    case '/demo/evidence': return route.design ? <EvidencePage mobile={isMobileDesign} /> : <LiveEvidencePage />
+    case '/demo/instructor': return <LiveInstructorSummaryPage />
+    case '/demo/admin': return <LiveAdminAnalyticsPage />
     case '/demo/error': return <ErrorPage state={q.get('state') ?? 'source'} mobile={isMobileDesign} />
     case '/student': return <StudentHome />
     case '/student/docs': return <StudentDocs selected={q.get('state') === 'selected'} />
@@ -103,5 +110,5 @@ function RouteView({ route }: { route: Route }) {
 
 export default function App() {
   const route = useRoute()
-  return <div className={route.design?.viewport === 'mobile' ? 'figma-mobile-preview' : ''}><RouteView route={route} /></div>
+  return <LearningProvider><div className={route.design?.viewport === 'mobile' ? 'figma-mobile-preview' : ''}>{route.design && <div className="figma-prototype-banner" role="status">Figma prototype · trạng thái/dữ liệu minh họa, không phải MVP live</div>}<RouteView route={route} /></div></LearningProvider>
 }

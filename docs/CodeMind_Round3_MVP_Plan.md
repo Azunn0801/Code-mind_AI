@@ -25,7 +25,7 @@ Vấn đề lớn nhất không còn là thiếu ý tưởng mà là **scope và
 1. File Word mang tên `CodeMind - FundFlow.docx` nhưng nội dung là CodeMind; phải thống nhất tên dự án và tên file.
 2. Mục lục Word đang hiện `Error! No bookmark name given.` trên toàn bộ mục; đây là lỗi trình bày nghiêm trọng.
 3. Báo cáo hiện dài, nhiều chữ, ít sơ đồ; một số bảng bị ngắt trang và không lặp header. Cần viết lại theo cấu trúc đề vòng 3, không nối thêm vào báo cáo vòng 2.
-4. Đề giới hạn 20 trang không tính bìa/phụ lục. Bản hiện tại khoảng 21 trang nội dung hiển thị, chưa chứa đủ kiến trúc, ERD, API, QA, security, deployment và tài chính 12 tháng.
+4. Thông báo làm rõ mới hơn của Ban Tổ chức giới hạn **báo cáo chi tiết tối đa 60 trang nội dung**, không tính bìa/phụ lục. Giới hạn dung lượng an toàn **30 MB** trong đề gốc vẫn nên được giữ. Bản báo cáo mới phải theo Proposal Template, có kiến trúc, ERD, API, QA, security, deployment và tài chính 12 tháng; không nối thêm vào báo cáo Vòng 2.
 5. Các số liệu thị trường/CAC chủ yếu là giả định. Cần gắn nhãn “assumption” và bổ sung pilot 30–50 sinh viên, completion, self-correction và D7 retention.
 6. MOSS chưa có bằng chứng triển khai. Chỉ nên để là kiểm tra bất đồng bộ/roadmap, không đặt trong critical path của demo.
 7. Phần bảo mật cần mô tả rõ dữ liệu nào giảng viên/trường được xem, cơ sở consent, thời hạn lưu, xóa/xuất dữ liệu và audit log.
@@ -208,8 +208,52 @@ Chi tiết field, kiểu dữ liệu, khóa, PII, retention, RBAC, API và trace
 | 31/07–03/08 | AI gateway, hint ladder, evidence, teacher read-only, analytics events | Policy test pass; RBAC/consent audit pass |
 | 04–06/08 | Recovery states, P1 chọn lọc, security/performance/E2E, backup/restore | Không còn P0 blocker; P95 và error rate được ghi nhận |
 | 07/08 | Freeze code, deploy production, pilot rehearsal 5–10 người, chốt số liệu | URL public ổn định; demo accounts hoạt động |
-| 08/08 | Hoàn thiện PDF ≤20 trang, video ≤3 phút, pitch 5 phút, backup video/data | Tất cả link public và mở incognito được |
+| 08/08 | Hoàn thiện PDF báo cáo chi tiết ≤60 trang, video ≤3 phút, pitch 5 phút, backup video/data | Tất cả link public và mở incognito được; giới hạn 30 MB theo đề gốc vẫn được giữ |
 | 09/08 trước 10:00 | Nộp sớm, kiểm tra checksum/link/quyền truy cập | Có biên nhận; còn buffer 2 giờ trước deadline |
+
+### Mốc kiểm chứng hiện hành (09/08/2026)
+
+Nguồn trạng thái hiện hành là [`CodeMind_Progress_Log.md`](CodeMind_Progress_Log.md): backend Ruff/compile và API contract **20 route bắt buộc**, **12 pytest pass**; frontend **ESLint và production build pass**. Build đã được chạy lại tại thư mục MVP gốc sau khi canonical hóa Vite root cho junction/D:. Các số lượng 4/5/6/8 test hoặc 16/18 route bên dưới là bản ghi theo thời điểm, chỉ để truy vết và **không** phải gate hiện hành.
+
+### Bản ghi lịch sử tại thời điểm 06/08/2026 — Mốc 22–24/07
+
+Đã hoàn tất ở mức baseline
+scope/contract/repo. P0 đã được khóa trong
+[`CodeMind_MVP_Scope_Freeze.md`](CodeMind_MVP_Scope_Freeze.md), backend có migration
+đầu và API contract checker, CI đã được thêm tại `/.github/workflows/ci.yml`.
+Backend lint, syntax, contract check và 4 test API đều pass; frontend lint/build cũng
+pass. PostgreSQL runtime, deploy, load/security, backup/restore và pilot vẫn chưa
+được tính là hoàn thành trong mốc này. Đây là kết quả ghi nhận ở thời điểm 06/08, đã được thay thế về mặt gate hiện hành bởi mốc 20 route/12 pytest ở trên.
+
+### Bản ghi lịch sử tại thời điểm 07/08/2026 — Mốc 25–30/07
+
+Vertical slice không AI đã nối
+được ở local: demo login → consent → source snapshot → concept check → code
+runner → progress/evidence. Frontend có API client, localStorage restore và Vite
+proxy `/api`; backend có test happy path 4/5 → 5/5 và GET session sau complete.
+Lint/build frontend, lint/contract/5 test backend đều pass ở thời điểm đó. Sau mốc này,
+local profile đã chuyển sang `PersistentRepository` snapshot JSON; vẫn không phải
+PostgreSQL runtime. Runner vẫn là simulated, nên chưa được đánh dấu staging/production. Các số liệu 5 test và trạng thái build ở đoạn này chỉ mang tính lịch sử, không thay thế trạng thái kiểm chứng hiện hành.
+
+### Bản ghi lịch sử tại thời điểm 09/08/2026 — Stage 3 local
+
+Stage 3 local đã hoàn tất nhưng chưa đủ Definition of
+Done của staging. Scope/data/API/repo/CI và flow local có bằng chứng; PostgreSQL
+runtime, runner cô lập, AI gateway production, E2E/security/performance,
+backup/restore, public deploy và pilot vẫn để `[ ]` hoặc `[~]`. Một lần chạy sớm có
+lỗi quyền WindowsApps/`node_modules`, nhưng gate được chạy lại sau đó đã pass như cập
+nhật Stage 3 bên dưới; không dùng lỗi môi trường đó để suy ra lỗi chức năng. Nhật ký
+team hiện hành nằm tại [`CodeMind_Progress_Log.md`](CodeMind_Progress_Log.md).
+
+Mốc 31/07–03/08 đã đạt DoD ở local tại thời điểm ghi nhận.
+Backend đã tách `AIGateway` khỏi route với canned fallback offline; response có
+policy decision/version, model id, latency, quota cost và citation tới source
+version. Quota mặc định là 3 lượt hỏi mỗi session, vượt quota trả `429` có details.
+Analytics event được redacted và lưu cùng persistent snapshot; `content_admin` mới
+đọc được endpoint analytics. Instructor summary read-only kiểm tra role,
+organization và `teacher_visibility`, không trả raw code. Frontend live practice đã
+nối hỏi AI → citation link → mở hint 1–3 theo thứ tự. Gate local: Ruff, compile,
+contract 18 route, **8 pytest**, ESLint và production build đều pass tại thời điểm đó. Đây là bản ghi lịch sử, đã được thay thế bởi gate backend 20 route/12 pytest; không dùng để kết luận trạng thái production build frontend hiện tại. Provider AI thật, PostgreSQL runtime, runner cô lập, staging security/performance/E2E, monitoring, backup/restore và public deploy vẫn là các mốc chưa hoàn tất.
 
 ### Phân công tối thiểu
 
@@ -221,29 +265,28 @@ Chi tiết field, kiểu dữ liệu, khóa, PII, retention, RBAC, API và trace
 
 Nếu đội ít người, một người có thể kiêm vai trò nhưng mỗi workstream vẫn cần owner và reviewer.
 
-## 10. Cấu trúc báo cáo vòng 3 đề xuất (≤20 trang)
+## 10. Cấu trúc báo cáo vòng 3 đề xuất (≤60 trang nội dung)
 
 | Phần | Trang gợi ý | Nội dung |
 |---|---:|---|
 | Bìa | Không tính | Tên đội, sản phẩm, link public |
-| Executive summary | 1 | Pain, solution, traction/pilot, ask |
-| MVP và user flow | 2–4 | P0 đã triển khai, ảnh flow, thay đổi từ vòng 2 |
-| Kiến trúc, ERD, API | 5–8 | Sơ đồ, data/security, AI/third-party |
-| Deployment, QA, security | 9–10 | CI/CD, test evidence, backup, monitoring |
-| Demo/deployment evidence | 11 | URL, accounts, QR video ≤3 phút |
-| Lean Canvas/revenue | 12–14 | Segment, value, channel, revenue/cost |
-| Customer journey/marketing | 15–16 | Funnel 100→1000, content, KPI, CAC assumption |
-| Tài chính 12 tháng | 17–18 | Capex/Opex/revenue/break-even, 3 kịch bản |
-| Roadmap/risk/conclusion | 19–20 | 3/6/12 tháng, risk owner/mitigation |
+| Executive summary | 1–2 | Pain, solution, target, USP, trạng thái kiểm chứng và giả định pilot |
+| MVP và user flow | 3–14 | P0 đã triển khai, UI/flow, thay đổi từ Vòng 2, ranh giới prototype/live |
+| Kiến trúc, ERD, dữ liệu và API | 15–30 | Sơ đồ, entities, RBAC/consent, lifecycle, API và AI/third-party boundary |
+| Deployment, QA và security | 31–38 | CI/CD boundary, test evidence, backup/restore, monitoring và rủi ro chưa đóng |
+| Demo/deployment evidence | 39–41 | URL, role/account handoff, checklist incognito; video chỉ là yêu cầu official tách riêng |
+| Lean Canvas/revenue | 42–46 | Segment, value, channel, revenue/cost; đánh dấu mọi giả định |
+| Customer journey/marketing | 47–51 | Funnel 100→1000, content, KPI, CAC assumption |
+| Tài chính 12 tháng | 52–56 | Capex/Opex/revenue/break-even, 3 kịch bản |
+| Roadmap/risk/conclusion | 57–60 | 3/6/12 tháng, owner/mitigation và điều kiện chứng minh tiếp theo |
 | Phụ lục | Không tính | Data dictionary, API chi tiết, test log, survey/pilot |
 
 ## 11. Checklist nộp và demo
 
-- [ ] PDF ≤20 trang nội dung, ≤30 MB, mục lục không lỗi.
+- [~] PDF báo cáo chi tiết đã có bản render QA 22 trang vật lý/~185 KB; cấu trúc phải giữ **≤60 trang nội dung** (không tính bìa/phụ lục) và **≤30 MB**. Còn điền thông tin đội, URL public, dữ liệu pilot và rà soát cuối trước nộp.
 - [ ] URL MVP public, HTTPS, không localhost; kiểm tra bằng cửa sổ ẩn danh/mạng khác.
-- [ ] 3 tài khoản demo: student, instructor, content admin; role và mật khẩu ghi rõ.
-- [ ] Video ≤3 phút; live demo rehearsal ≤2:40 để có buffer.
-- [ ] Pitch 5 phút: pain → mechanism → live evidence → market → roadmap.
+- [ ] 3 tài khoản demo: student, instructor, content admin; role xác nhận và credential bàn giao qua kênh riêng, không ghi mật khẩu vào Git/PDF công khai.
+- [ ] Video ≤3 phút và slide trình bày: yêu cầu official nhưng nằm ngoài phạm vi làm việc hiện tại theo chủ dự án; phải tự bổ sung hoặc có miễn trừ trước khi nộp chính thức.
 - [ ] Dữ liệu demo được seed và reset được; có fallback khi AI/source lỗi.
 - [ ] Báo cáo chỉ nói “đã triển khai” với chức năng thực sự chạy; phần khác gắn “roadmap”.
 - [ ] Pilot/log/test evidence có ngày, cỡ mẫu, định nghĩa chỉ số và giới hạn.
@@ -257,4 +300,3 @@ Nếu đội ít người, một người có thể kiêm vai trò nhưng mỗi 
 4. Raw code retention là 90 hay 180 ngày; khuyến nghị 180 cho pilot rồi xóa/anonymize.
 5. Định nghĩa “AI không làm hộ” có bộ test prompt nào; cần ít nhất 20 adversarial cases.
 6. Người chịu trách nhiệm cuối cùng cho deploy, demo, báo cáo và giờ nộp.
-

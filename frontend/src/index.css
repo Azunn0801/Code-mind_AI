@@ -119,6 +119,7 @@ li { color: var(--muted); margin: 8px 0; line-height: 1.5; }
 
 .code-block { background: var(--code); border: 1px solid var(--border); border-radius: 8px; padding: 16px; color: var(--text); overflow: auto; min-height: 88px; font-size: 13px; line-height: 1.55; white-space: pre-wrap; }
 .code-block--success { border-color: var(--success); }
+.code-editor { width: 100%; min-height: 330px; resize: vertical; border: 1px solid var(--border); border-radius: 8px; padding: 16px; color: var(--text); background: var(--code); font-family: var(--mono); font-size: 13px; line-height: 1.55; white-space: pre; tab-size: 4; }
 .field { display: grid; gap: 7px; margin-bottom: 14px; font-size: 13px; font-weight: 600; }
 .field input, .field textarea, textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--code); padding: 12px; min-height: 44px; }
 .field textarea, textarea { min-height: 110px; resize: vertical; }
@@ -204,6 +205,9 @@ li { color: var(--muted); margin: 8px 0; line-height: 1.5; }
 .app-header { height: 68px; background: var(--raised); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
 .app-header__left { display: flex; align-items: center; gap: 16px; }
 .app-badge, .lesson-chip { min-height: 36px; padding: 8px 12px; display: inline-flex; align-items: center; background: var(--info-bg); color: var(--info); border-radius: 999px; font-size: 13px; }
+.prototype-badge { background: var(--warning-bg); color: var(--warning); }
+.live-api-recovery { margin-top: 16px; }
+.figma-prototype-banner { position: sticky; top: 0; z-index: 50; padding: 8px 18px; background: var(--warning-bg); border-bottom: 1px solid var(--warning); color: var(--warning); text-align: center; font-size: 12px; font-weight: 700; }
 .app-header__status { color: var(--muted); font-size: 13px; }
 .app-shell__body { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: calc(100vh - 68px); }
 .side-nav { background: var(--raised); border-right: 1px solid var(--border); padding: 20px 16px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -228,12 +232,20 @@ li { color: var(--muted); margin: 8px 0; line-height: 1.5; }
 .metric-list p { display: flex; justify-content: space-between; }
 .term-button { border: 1px solid var(--info); background: transparent; color: var(--info); min-width: 160px; min-height: 44px; padding: 10px 16px; border-radius: 8px; cursor: pointer; }
 .term-button.selected { background: var(--info-bg); }
+.term-explainer { display: grid; align-content: start; gap: 8px; }
+.term-explainer .banner { margin-top: 4px; }
+.content-sidebar-grid code { overflow-wrap: anywhere; word-break: break-word; }
 .quiz-card { max-width: 900px; }
 .answer-list { display: grid; gap: 10px; margin: 18px 0; }
 .answer-list button { border: 1px solid var(--border); background: var(--code); color: var(--text); min-height: 78px; text-align: left; padding: 16px; border-radius: 8px; cursor: pointer; }
 .answer-list button.selected { border-color: var(--info); background: var(--info-bg); }
 .answer-list small { margin-top: 5px; }
 .practice-layout { display: grid; grid-template-columns: minmax(220px, .75fr) minmax(420px, 1.45fr) minmax(220px, .75fr); gap: 14px; }
+.ai-coach-card { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--info) 38%, var(--line)); }
+.ai-coach-card .action-row { align-items: center; }
+.ai-coach-card input { flex: 1 1 280px; min-height: 44px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-strong); color: var(--text); padding: 10px 12px; }
+.hint-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+.hint-copy { padding: 10px 12px; border-left: 3px solid var(--info); background: var(--info-bg); border-radius: 0 8px 8px 0; }
 .editor-card .code-block { min-height: 330px; }
 .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
 .tabs button { border: 0; background: transparent; color: var(--muted); min-height: 44px; padding: 8px 18px; cursor: pointer; border-radius: 8px; }

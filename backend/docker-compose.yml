@@ -1,0 +1,55 @@
+services:
+  api:
+    build: .
+    environment:
+      APP_ENV: "${APP_ENV:-local}"
+      AUTH_MODE: demo
+      CODE_RUNNER_MODE: simulated
+      AI_MODE: canned
+      AI_MAX_INTERACTIONS_PER_SESSION: 3
+      DATABASE_URL: "postgresql+psycopg://${POSTGRES_USER:?Set POSTGRES_USER in .env}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:?Set POSTGRES_DB in .env}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:5173}"
+      REPOSITORY_MODE: postgres
+    ports:
+      - "${API_PORT:-8765}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/health/ready', timeout=2)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  migrate:
+    image: postgres:16-alpine
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: "${POSTGRES_DB:?Set POSTGRES_DB in .env}"
+      PGUSER: "${POSTGRES_USER:?Set POSTGRES_USER in .env}"
+      PGPASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./migrations:/migrations:ro
+    command: ["sh", "-ec", "psql -v ON_ERROR_STOP=1 -f /migrations/001_initial.sql"]
+    restart: "no"
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:?Set POSTGRES_DB in .env}"
+      POSTGRES_USER: "${POSTGRES_USER:?Set POSTGRES_USER in .env}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - codemind_pg:/var/lib/postgresql/data
+
+volumes:
+  codemind_pg:
